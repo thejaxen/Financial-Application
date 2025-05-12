@@ -21,7 +21,7 @@ public class UserServiceImplementation implements UserService{
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         //Checking if user have already account by email and phone number.
-        if (userRepository.existsByEmail(userRequest.getEmail()) || userRepository.existByPhoneNumber(userRequest.getPhoneNumber())) {
+        if (userRepository.existsByEmail(userRequest.getEmail()) || userRepository.existsByPhoneNumber(userRequest.getPhoneNumber())) {
 
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_EXISTS_CODE)

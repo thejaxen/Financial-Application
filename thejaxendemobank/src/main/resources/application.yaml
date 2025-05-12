@@ -1,4 +1,19 @@
+server:
+  port: 5000
+
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: .............
+    password: .............
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   datasource:
     url: jdbc:postgresql://localhost:5432/BankingApplication
     username: postgres
@@ -6,5 +21,9 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: update
