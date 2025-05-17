@@ -2,6 +2,7 @@ package com.thejaxen.thejaxendemobank.service;
 
 import com.thejaxen.thejaxendemobank.DTO.AccountInfo;
 import com.thejaxen.thejaxendemobank.DTO.BankResponse;
+import com.thejaxen.thejaxendemobank.DTO.EmailDetails;
 import com.thejaxen.thejaxendemobank.DTO.UserRequest;
 import com.thejaxen.thejaxendemobank.entity.User;
 import com.thejaxen.thejaxendemobank.repository.UserRepository;
@@ -17,6 +18,9 @@ public class UserServiceImplementation implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
@@ -46,6 +50,14 @@ public class UserServiceImplementation implements UserService{
                     .build();
 
                 User savedUser = userRepository.save(newUser);
+
+                EmailDetails emailDetails = EmailDetails.builder()
+                        .recipient(savedUser.getEmail())
+                        .subject("Account created")
+                        .messageBody("Congratulations! Your account has been created! \n Your account details: \n" +
+                        "Account Name: " + savedUser.getFirstName() + " " + savedUser.getOtherName() + " " +savedUser.getLastName()+"\nAccount Number: " + savedUser.getAccountNumber())
+                        .build();
+                emailService.sendEmailAlert(emailDetails);
 
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS)
