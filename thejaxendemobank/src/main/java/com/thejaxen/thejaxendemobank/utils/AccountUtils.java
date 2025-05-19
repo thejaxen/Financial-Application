@@ -13,6 +13,15 @@ public class AccountUtils {
 
     public static final String ACCOUNT_CREATION_MESSAGE = "Account creation successful.";
 
+    public static final String ACCOUNT_NOT_EXISTS_CODE = "003";
+
+    public static final String ACCOUNT_NOT_EXISTS_MESSAGE = "User with the given account number does not exist.";
+
+    public static final String ACCOUNT_FOUND_CODE = "004";
+
+    public static final String ACCOUNT_FOUND_MESSAGE = "Account found.";
+
+
     public static String generateAccountNumber() {
         //Takes the year and just random six digits.
 

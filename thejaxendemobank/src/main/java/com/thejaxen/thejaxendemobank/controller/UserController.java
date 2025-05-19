@@ -2,6 +2,7 @@ package com.thejaxen.thejaxendemobank.controller;
 
 
 import com.thejaxen.thejaxendemobank.DTO.BankResponse;
+import com.thejaxen.thejaxendemobank.DTO.EnquiryRequest;
 import com.thejaxen.thejaxendemobank.DTO.UserRequest;
 import com.thejaxen.thejaxendemobank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,15 @@ public class UserController {
     @PostMapping("/createAccount")
     public BankResponse createAccount(@RequestBody UserRequest userRequest){
         return userService.createAccount(userRequest);
+    }
+
+    @GetMapping("/balanceEnquiry")
+    public BankResponse BalanceEnquiry(@RequestBody EnquiryRequest request){
+        return userService.balanceEnquiry(request);
+    }
+
+    @GetMapping("/nameEnquiry")
+    public String NameEnquiry(@RequestBody EnquiryRequest request){
+        return userService.nameEnquiry(request);
     }
 }
