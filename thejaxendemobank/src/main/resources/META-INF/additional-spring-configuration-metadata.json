@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "my.mail.sender",
+      "type": "java.lang.String",
+      "description": "Description for my.mail.sender."
+  }
+] }

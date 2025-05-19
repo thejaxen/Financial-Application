@@ -1,8 +1,6 @@
 package com.thejaxen.thejaxendemobank.service;
 
-import com.thejaxen.thejaxendemobank.DTO.AccountInfo;
-import com.thejaxen.thejaxendemobank.DTO.BankResponse;
-import com.thejaxen.thejaxendemobank.DTO.UserRequest;
+import com.thejaxen.thejaxendemobank.DTO.*;
 import com.thejaxen.thejaxendemobank.entity.User;
 import com.thejaxen.thejaxendemobank.repository.UserRepository;
 import com.thejaxen.thejaxendemobank.utils.AccountUtils;
@@ -17,6 +15,9 @@ public class UserServiceImplementation implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    EmailService emailService;
 
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
@@ -47,6 +48,14 @@ public class UserServiceImplementation implements UserService{
 
                 User savedUser = userRepository.save(newUser);
 
+                EmailDetails emailDetails = EmailDetails.builder()
+                        .recipient(savedUser.getEmail())
+                        .subject("Account created")
+                        .messageBody("Congratulations! Your account has been created! \n Your account details: \n" +
+                        "Account Name: " + savedUser.getFirstName() + " " + savedUser.getOtherName() + " " +savedUser.getLastName()+"\nAccount Number: " + savedUser.getAccountNumber())
+                        .build();
+                emailService.sendEmailAlert(emailDetails);
+
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS)
                     .responseMessage(AccountUtils.ACCOUNT_CREATION_MESSAGE)
@@ -57,5 +66,43 @@ public class UserServiceImplementation implements UserService{
                             .build())
                     .build();
         }
+    }
+
+    @Override
+    public BankResponse balanceEnquiry(EnquiryRequest request) {
+
+        //check if provided account number exists in the db
+        boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
+        if(!isAccountExist) {
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXISTS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_FOUND_CODE)
+                .responseMessage(AccountUtils.ACCOUNT_EXISTS_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountBalance(foundUser.getAccountBalance())
+                        .accountNumber(request.getAccountNumber())
+                        .accountName(foundUser.getFirstName() + " " + foundUser.getOtherName() + " " + foundUser.getLastName())
+                        .build())
+                .build();
+    }
+
+    @Override
+    public String nameEnquiry(EnquiryRequest request) {
+
+        boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
+        if(!isAccountExist) {
+            return AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE;
+        }
+        User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
+
+        return foundUser.getFirstName() + " " + foundUser.getLastName() + " " + foundUser.getOtherName();
+
     }
 }
