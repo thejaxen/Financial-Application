@@ -21,6 +21,9 @@ public class AccountUtils {
 
     public static final String ACCOUNT_FOUND_MESSAGE = "Account found.";
 
+    public static final String ACCOUNT_CREDITED_SUCCESS = "005";
+
+    public static final String ACCOUNT_CREDITED_MESSAGE = "Credit successful.";
 
     public static String generateAccountNumber() {
         //Takes the year and just random six digits.
