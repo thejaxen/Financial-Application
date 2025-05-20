@@ -84,7 +84,7 @@ public class UserServiceImplementation implements UserService{
         User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_FOUND_CODE)
-                .responseMessage(AccountUtils.ACCOUNT_EXISTS_MESSAGE)
+                .responseMessage(AccountUtils.ACCOUNT_FOUND_MESSAGE)
                 .accountInfo(AccountInfo.builder()
                         .accountBalance(foundUser.getAccountBalance())
                         .accountNumber(request.getAccountNumber())
@@ -105,4 +105,34 @@ public class UserServiceImplementation implements UserService{
         return foundUser.getFirstName() + " " + foundUser.getLastName() + " " + foundUser.getOtherName();
 
     }
+
+    @Override
+    public BankResponse creditAccount(CreditDebitRequest request) {
+
+        boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
+        if(!isAccountExist){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NOT_EXISTS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        User userToCredit = userRepository.findByAccountNumber(request.getAccountNumber());
+        userToCredit.setAccountBalance(userToCredit.getAccountBalance().add(request.getAmount()));
+
+        userRepository.save(userToCredit);
+
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_CREDITED_SUCCESS)
+                .responseMessage(AccountUtils.ACCOUNT_CREDITED_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountName(userToCredit.getFirstName() + " " + userToCredit.getOtherName() + " " + userToCredit.getLastName())
+                        .accountBalance(userToCredit.getAccountBalance())
+                        .accountNumber(request.getAccountNumber())
+                        .build())
+                .build();
+    }
+
+
 }
