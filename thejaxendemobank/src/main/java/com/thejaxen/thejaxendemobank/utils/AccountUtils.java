@@ -25,6 +25,14 @@ public class AccountUtils {
 
     public static final String ACCOUNT_CREDITED_MESSAGE = "Credit successful.";
 
+    public static final String ACCOUNT_DEBITED_SUCCESS = "006";
+
+    public static final String ACCOUNT_DEBITED_MESSAGE = "Debit successful.";
+
+    public static final String INSUFFICIENT_BALANCE_CODE = "006";
+
+    public static final String INSUFFICIENT_BALANCE_MESSAGE = "Balance is insufficient.";
+
     public static String generateAccountNumber() {
         //Takes the year and just random six digits.
 
