@@ -33,6 +33,18 @@ public class AccountUtils {
 
     public static final String INSUFFICIENT_BALANCE_MESSAGE = "Balance is insufficient.";
 
+    public static final String DESTINATION_ACCOUNT_NOT_EXISTS_CODE = "007";
+
+    public static final String DESTINATION_ACCOUNT_NOT_EXISTS_MESSAGE = "Destination account does not exist.";
+
+    public static final String SOURCE_ACCOUNT_NOT_EXISTS_CODE = "008";
+
+    public static final String SOURCE_ACCOUNT_NOT_EXISTS_MESSAGE = "Source account does not exist.";
+
+    public static final String TRANSFER_SUCCESSFUL_CODE = "009";
+
+    public static final String TRANSFER_SUCCESSFUL_MESSAGE = "Money transfer is successful.";
+
     public static String generateAccountNumber() {
         //Takes the year and just random six digits.
 
