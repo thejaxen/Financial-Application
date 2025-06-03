@@ -1,8 +1,5 @@
 package com.thejaxen.thejaxendemobank.service;
-import com.thejaxen.thejaxendemobank.DTO.BankResponse;
-import com.thejaxen.thejaxendemobank.DTO.CreditDebitRequest;
-import com.thejaxen.thejaxendemobank.DTO.EnquiryRequest;
-import com.thejaxen.thejaxendemobank.DTO.UserRequest;
+import com.thejaxen.thejaxendemobank.DTO.*;
 
 public interface UserService {
 
@@ -15,4 +12,6 @@ public interface UserService {
     BankResponse creditAccount(CreditDebitRequest request);
 
     BankResponse debitAccount(CreditDebitRequest request);
+
+    BankResponse transfer(TransferRequest request);
 }

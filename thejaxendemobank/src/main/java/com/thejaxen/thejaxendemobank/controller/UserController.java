@@ -1,10 +1,7 @@
 package com.thejaxen.thejaxendemobank.controller;
 
 
-import com.thejaxen.thejaxendemobank.DTO.BankResponse;
-import com.thejaxen.thejaxendemobank.DTO.CreditDebitRequest;
-import com.thejaxen.thejaxendemobank.DTO.EnquiryRequest;
-import com.thejaxen.thejaxendemobank.DTO.UserRequest;
+import com.thejaxen.thejaxendemobank.DTO.*;
 import com.thejaxen.thejaxendemobank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +36,10 @@ public class UserController {
     @PostMapping("/debit")
     public BankResponse debitAccount(@RequestBody CreditDebitRequest request){
         return userService.debitAccount(request);
+    }
+
+    @PostMapping("/transfer")
+    public BankResponse transfer(@RequestBody TransferRequest request){
+        return userService.transfer(request);
     }
 }
