@@ -20,6 +20,9 @@ public class UserServiceImplementation implements UserService{
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    TransactionService transactionService;
+
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
         //Checking if user have already account by email and phone number.
@@ -119,10 +122,22 @@ public class UserServiceImplementation implements UserService{
                     .build();
         }
 
+
+
         User userToCredit = userRepository.findByAccountNumber(request.getAccountNumber());
         userToCredit.setAccountBalance(userToCredit.getAccountBalance().add(request.getAmount()));
 
         userRepository.save(userToCredit);
+
+        //SaveTransaction
+
+        TransactionDto transactionDto = TransactionDto.builder()
+                .transactionType("CREDIT")
+                .amount(request.getAmount())
+                .accountNumber(userToCredit.getAccountNumber())
+                .build();
+        transactionService.saveTransaction(transactionDto);
+
 
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_CREDITED_SUCCESS)
@@ -164,6 +179,15 @@ public class UserServiceImplementation implements UserService{
         }else{
             userToDebit.setAccountBalance(userToDebit.getAccountBalance().subtract(request.getAmount()));
             userRepository.save(userToDebit);
+
+            TransactionDto transactiondto = TransactionDto.builder()
+                    .transactionType("DEBIT")
+                    .amount(request.getAmount())
+                    .accountNumber(userToDebit.getAccountNumber())
+                    .build();
+
+            transactionService.saveTransaction(transactiondto);
+
 
             return BankResponse.builder()
                     .responseCode(AccountUtils.ACCOUNT_DEBITED_SUCCESS)
@@ -220,6 +244,14 @@ public class UserServiceImplementation implements UserService{
 
         emailService.sendEmailAlert(debitAlert);
 
+        TransactionDto debittransaction = TransactionDto.builder()
+                .amount(request.getAmount())
+                .accountNumber(request.getSourceAccountNumber())
+                .transactionType("DEBIT")
+                .build();
+
+        transactionService.saveTransaction(debittransaction);
+
         User destinationAccountUser = userRepository.findByAccountNumber(request.getDestinationAccountNumber());
         String destinationUserName = destinationAccountUser.getFirstName() + " " + destinationAccountUser.getOtherName() + " " + destinationAccountUser.getLastName();
         destinationAccountUser.setAccountBalance(destinationAccountUser.getAccountBalance().add(request.getAmount()));
@@ -231,6 +263,14 @@ public class UserServiceImplementation implements UserService{
                 .messageBody("The amount of " + request.getAmount() + " money has been came from " + sourceUserName + " your current balance is " + destinationAccountUser.getAccountBalance())
                 .build();
         emailService.sendEmailAlert(creditAlert);
+
+        TransactionDto credittransaction = TransactionDto.builder()
+                .transactionType("CREDIT")
+                .amount(request.getAmount())
+                .accountNumber(destinationAccountUser.getAccountNumber())
+                .build();
+
+        transactionService.saveTransaction(credittransaction);
 
         return BankResponse.builder()
                 .responseCode(AccountUtils.TRANSFER_SUCCESSFUL_CODE)
