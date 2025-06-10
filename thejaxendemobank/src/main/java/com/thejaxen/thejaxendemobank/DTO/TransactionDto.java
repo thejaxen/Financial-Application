@@ -17,6 +17,7 @@ public class TransactionDto {
     private String accountNumber;
     private String status;
 
+
     public String getTransactionType() {
         return transactionType;
     }
@@ -48,4 +49,5 @@ public class TransactionDto {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

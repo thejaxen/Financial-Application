@@ -4,9 +4,13 @@ import com.thejaxen.thejaxendemobank.DTO.TransactionDto;
 import com.thejaxen.thejaxendemobank.entity.Transaction;
 import com.thejaxen.thejaxendemobank.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
+@Component
 public class TransactionServiceImplementation implements TransactionService {
 
     @Autowired
