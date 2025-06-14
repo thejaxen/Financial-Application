@@ -45,6 +45,18 @@ public class AccountUtils {
 
     public static final String TRANSFER_SUCCESSFUL_MESSAGE = "Money transfer is successful.";
 
+    public static final String CREDIT_ERROR_MESSAGE = "Something happened while crediting please try again later.";
+
+    public static final String CREDIT_ERROR_CODE = "55";
+
+    public static final String DEBIT_ERROR_MESSAGE = "Something happened while debiting please try again later.";
+
+    public static final String DEBIT_ERROR_CODE = "66";
+
+    public static final String TRANSFER_ERROR_MESSAGE = "Something happened while transfering please try again later.";
+
+    public static final String TRANSFER_ERROR_CODE = "99";
+
     public static String generateAccountNumber() {
         //Takes the year and just random six digits.
 
